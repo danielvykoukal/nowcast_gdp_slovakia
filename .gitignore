@@ -1,0 +1,12 @@
+# macOS / iCloud
+.DS_Store
+._*
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Office temp files
+~$*

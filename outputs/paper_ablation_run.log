@@ -1,0 +1,12 @@
+Paper-faithful DFM ablation | target = 2026Q2 | 19 monthly series, flash n=85
+
+  C0 current-equiv (scalar-R WN idio)              llf= -7140.5  nc=+0.32  RMSE all=0.730 ex20=0.658  (n=65)
+  C1 + MM-aggregated idio in-state (eq.7)          llf= -7148.5  nc=+0.32  RMSE all=0.728 ex20=0.642  (n=65)
+  C2 + AR(1) idio persistence (eq.8-11)            llf= -5437.0  nc=+0.60  RMSE all=0.767 ex20=0.692  (n=65)
+  C3 + soft YoY loading (eq.7)                     llf= -5308.6  nc=+0.44  RMSE all=0.752 ex20=0.677  (n=65)
+  C4 + multi-release flash+final [FULL]            llf= -5403.9  nc=+0.44  RMSE all=0.752 ex20=0.677  (n=65)
+
+FULL model, real-time flash timing (flash available for target quarter):
+  RMSE all=0.536  ex2020=0.520
+
+Wrote outputs/COMPARISON_auto.md and outputs/paper_ablation.csv (curated narrative: root COMPARISON.md)

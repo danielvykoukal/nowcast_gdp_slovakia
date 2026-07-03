@@ -1,0 +1,6 @@
+variant,2025Q1,2025Q2,2025Q3,2025Q4,mean_nowcast,overshoot
+Full model (all series),0.91,0.64,0.38,0.95,0.72,0.52
+Drop foreign IP,0.42,0.41,0.61,0.51,0.49,0.29
+Drop construction & exports,0.57,0.66,0.59,0.7,0.63,0.43
+Domestic core only,0.21,0.68,0.38,0.68,0.49,0.29
+"Full, estimated 2013+",0.7,0.52,0.22,0.85,0.57,0.37

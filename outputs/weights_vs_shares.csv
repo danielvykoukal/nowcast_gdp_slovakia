@@ -1,0 +1,4 @@
+sector,model_weight_loading_%,model_weight_sn_%,actual_gva_share_%,gap_loading_pp,gap_sn_pp
+Industry,67.1,83.8,44.9,22.2,38.9
+Construction,10.7,2.5,16.9,-6.2,-14.4
+Trade & services,22.3,13.6,38.2,-15.9,-24.6

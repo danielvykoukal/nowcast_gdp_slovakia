@@ -1,0 +1,2 @@
+target_quarter,nowcast_qoq_pct,prev_quarter,prev_actual_qoq_pct,spec
+2026Q2,0.254,2026Q1,0.2,"baseline-2026-07 (lean14+vac, real services, 2013+)"

@@ -1,0 +1,25 @@
+Sweep: 6 data combos x 2 windows = 12 configs
+
+  winner_base (no new data) 2013+  | 2025 bias +0.09 rmse 0.22 | val bias +0.02 rmse 0.68 | norm rmse 0.36
+  winner_base (no new data) 2016+  | 2025 bias +0.05 rmse 0.21 | val bias -0.01 rmse 0.68 | norm rmse 0.40
+  winner + wage_bill   2013+  | 2025 bias +0.03 rmse 0.05 | val bias -0.44 rmse 0.90 | norm rmse 0.38
+  winner + wage_bill   2016+  | 2025 bias -0.06 rmse 0.08 | val bias -0.53 rmse 0.96 | norm rmse 0.30
+  winner + new services 2013+  | 2025 bias +0.02 rmse 0.20 | val bias +0.01 rmse 0.65 | norm rmse 0.35
+  winner + new services 2016+  | 2025 bias +0.01 rmse 0.19 | val bias -0.00 rmse 0.63 | norm rmse 0.39
+  winner + all new data 2013+  | 2025 bias +0.13 rmse 0.14 | val bias -0.08 rmse 0.59 | norm rmse 0.34
+  winner + all new data 2016+  | 2025 bias +0.06 rmse 0.07 | val bias -0.15 rmse 0.62 | norm rmse 0.35
+  full + all new data  2013+  | 2025 bias +0.00 rmse 0.20 | val bias -0.07 rmse 0.66 | norm rmse 0.40
+  full + all new data  2016+  | 2025 bias -0.03 rmse 0.17 | val bias -0.09 rmse 0.63 | norm rmse 0.40
+  domestic+income      2013+  | 2025 bias +0.18 rmse 0.19 | val bias -0.09 rmse 0.59 | norm rmse 0.38
+  domestic+income      2016+  | 2025 bias +0.10 rmse 0.12 | val bias -0.17 rmse 0.61 | norm rmse 0.34
+
+Best configs (min |2025 bias| + val RMSE):
+                 data period  bias_2025  rmse_2025  bias_val  rmse_val  rmse_norm
+winner + new services  2016+      0.012      0.192    -0.001     0.630      0.391
+  full + all new data  2013+      0.002      0.196    -0.068     0.661      0.403
+  full + all new data  2016+     -0.032      0.175    -0.086     0.632      0.401
+winner + new services  2013+      0.022      0.197     0.013     0.648      0.352
+winner + all new data  2016+      0.062      0.072    -0.150     0.615      0.349
+
+Wrote outputs/regime_experiment.{csv,png}
+EXIT 0
