@@ -10,3 +10,7 @@ venv/
 
 # Office temp files
 ~$*
+
+# Excluded from public repo (personal research / source paper)
+methodology paper.pdf
+Slovakia GDP Nowcasting Data Research.md
