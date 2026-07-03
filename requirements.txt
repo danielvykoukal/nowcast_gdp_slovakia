@@ -3,4 +3,5 @@ numpy>=1.24
 statsmodels>=0.14
 eurostat>=1.0
 certifi
+openpyxl>=3.1
 matplotlib>=3.6

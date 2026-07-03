@@ -9,6 +9,8 @@ Fetch the new candidate series requested for the panel expansion:
   * services_H / services_J / services_N — broaden services turnover beyond accommodation/food:
     transport (H), ICT (J), administrative (N) from the same Eurostat sts_setu_m as services_iaf.
     (Professional services M is not published SCA for SK; N is the available substitute.)
+  * emp_total     — total employment momentum: avg YoY % across the 5 SU SR sectors (od0007ms).
+  * vacancies_q   — quarterly job vacancies (number), Eurostat jvs_q_nace2, business economy B-S, SA.
 
 Not fetched (blocked without credentials / a manual file — reported, not hidden):
   * VAT receipts        — SK Financial Administration publishes XLS only, no API (manual scrape).
@@ -41,6 +43,13 @@ SECTORS = {"industry": "NACE01", "construction": "NACE06", "trade": "NACE09",
 def _get(url: str, tmo: int = 120) -> str:
     req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
     return urllib.request.urlopen(req, context=_SSL, timeout=tmo).read().decode("utf-8", "replace")
+
+
+def _write(s: pd.Series, slug: str) -> None:
+    """Write a series to data/raw/<slug>.csv and .xlsx (index label = s.index.name)."""
+    df = s.rename("value").reset_index()
+    df.to_csv(RAW / f"{slug}.csv", index=False)
+    df.to_excel(RAW / f"{slug}.xlsx", index=False)
 
 
 def _susr_pull(cube, specu, nace, unit, indic) -> pd.Series:
@@ -79,6 +88,29 @@ def build_wage_bill() -> pd.Series:
     return bill
 
 
+def build_emp_total() -> pd.Series:
+    """Total employment momentum: avg YoY % across the 5 published SU SR sectors (od0007ms,
+    index base 100 = YoY)."""
+    emps = {s: _susr_pull("od0007ms", "SPECU_Y_ROMR", n, "UNIT_INDEX", "U_PR_0007")
+            for s, n in SECTORS.items()}
+    out = (pd.DataFrame(emps) - 100).mean(axis=1).dropna()
+    out.index.name = "date"
+    return out
+
+
+def fetch_vacancies() -> pd.Series:
+    """Quarterly job vacancies (number), Eurostat jvs_q_nace2, business economy B-S, SA."""
+    df = eurostat.get_data_df("jvs_q_nace2", filter_pars={
+        "geo": ["SK"], "s_adj": ["SA"], "nace_r2": ["B-S"],
+        "sizeclas": ["TOTAL"], "indic_em": ["JOBVAC"]})
+    tc = [c for c in df.columns if isinstance(c, str) and len(c) >= 4 and c[:4].isdigit()]
+    r = df.iloc[0]
+    s = pd.Series({c: r[c] for c in tc}, dtype="float64").dropna()
+    s.index = s.index.str.replace("-", "")          # 2008-Q1 -> 2008Q1
+    s.index.name = "quarter"
+    return s.sort_index()
+
+
 # Eurostat services turnover (same query as services_iaf, different NACE)
 SERVICES = {"services_H": "H", "services_J": "J", "services_N": "N"}
 
@@ -97,13 +129,24 @@ def fetch_service(nace: str) -> pd.Series:
 def main():
     print("Building real_wage_bill from SU SR DATAcube (od0007ms x od0008ms / HICP)...")
     bill = build_wage_bill()
-    bill.rename("value").to_frame().to_csv(RAW / "real_wage_bill.csv")
+    _write(bill, "real_wage_bill")
     print(f"  real_wage_bill: {len(bill)} months {bill.index.min().date()}..{bill.index.max().date()}"
           f"  (last {bill.iloc[-1]:+.2f}% YoY real)")
 
+    emp = build_emp_total()
+    _write(emp, "emp_total")
+    print(f"  emp_total: {len(emp)} months {emp.index.min().date()}..{emp.index.max().date()}"
+          f"  (last {emp.iloc[-1]:+.2f}% YoY)")
+
+    vac = fetch_vacancies()
+    _write(vac, "vacancies_q")
+    print(f"  vacancies_q: {len(vac)} quarters {vac.index.min()}..{vac.index.max()}"
+          f"  (last {vac.iloc[-1]:.0f})")
+
     for slug, nace in SERVICES.items():
         s = fetch_service(nace)
-        s.rename("value").rename_axis("date").to_frame().to_csv(RAW / f"{slug}.csv")
+        s.index.name = "date"
+        _write(s, slug)
         print(f"  {slug}: {len(s)} months {s.index.min().date()}..{s.index.max().date()}")
     print("Done.")
 
