@@ -196,7 +196,9 @@ def main(refresh: bool = False) -> None:
             continue
         try:
             s = fetch_one(slug, spec)
-            s.rename("value").rename_axis("date").to_frame().to_csv(path)
+            frame = s.rename("value").rename_axis("date").to_frame()
+            frame.to_csv(path)
+            frame.to_excel(RAW / f"{slug}.xlsx")
             print(f"  OK    {slug:14s} {len(s):4d} rows  {s.index.min().date()} .. {s.index.max().date()}")
             ok += 1
         except Exception as e:  # noqa: BLE001 - report and continue
