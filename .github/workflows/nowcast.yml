@@ -30,6 +30,10 @@ jobs:
           python src/fetch_new_data.py
           python src/preprocess.py
           python src/run_live.py
+      - name: Weekly grid + timeline
+        run: |
+          python src/weekly_lean14v.py
+          python src/plot_weekly.py
       - name: Upload nowcast artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -37,6 +41,8 @@ jobs:
           path: |
             outputs/nowcast_latest.csv
             outputs/nowcast_latest.png
+            outputs/weekly_grid.png
+            outputs/weekly_timeline.png
       - name: Commit data + nowcast
         run: |
           git config user.name "danielvykoukal"
