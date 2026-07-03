@@ -1,6 +1,0 @@
-config,llf,nparams,nowcast,rmse_all,rmse_ex2020,n
-C0 current-equiv (scalar-R WN idio),-7140.5,42,0.323,0.73,0.658,65
-C1 + MM-aggregated idio in-state (eq.7),-7148.5,42,0.316,0.728,0.642,65
-C2 + AR(1) idio persistence (eq.8-11),-5437.0,62,0.603,0.767,0.692,65
-C3 + soft YoY loading (eq.7),-5308.6,62,0.444,0.752,0.677,65
-C4 + multi-release flash+final [FULL],-5403.9,63,0.445,0.752,0.677,65
