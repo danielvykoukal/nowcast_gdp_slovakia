@@ -1,0 +1,44 @@
+name: friday-nowcast
+
+# Weekly nowcast (Friday). Self-contained: fetch -> preprocess -> run the frozen
+# lean14v spec on the latest data -> commit outputs/nowcast_*.csv.
+on:
+  schedule:
+    - cron: "0 7 * * 5"       # 07:00 UTC (09:00 CET) Friday, after collect
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: repo-writer           # share the writer lock with collect-data
+  cancel-in-progress: false
+
+jobs:
+  nowcast:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Fetch, preprocess, nowcast
+        run: |
+          python src/fetch_data.py --refresh
+          python src/fetch_new_data.py
+          python src/preprocess.py
+          python src/run_live.py
+      - name: Commit data + nowcast
+        run: |
+          git config user.name "danielvykoukal"
+          git config user.email "daniel.vykoukal@cerge-ei.cz"
+          git add data outputs
+          if git diff --cached --quiet; then
+            echo "Nothing to commit."
+          else
+            git commit -m "nowcast: $(date -u +%Y-%m-%d)"
+            git pull --rebase origin main
+            git push origin main
+          fi
